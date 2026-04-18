@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  /* Reference: vibrant cyan / teal system */
+  --brand: #00c4c9;
+  --brand-bright: #00dce4;
+  --brand-hover: #00aeb4;
+  --brand-light: #5ee5e8;
+  --brand-muted: #ccf7f8;
+  --brand-deep: #0e7490;
+  --surface-dark: #000000;
+  --surface-soft: #f8fafc;
+  --border: #d1d5db;
+  --input-border: #c5c9d0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-brand: var(--brand);
+  --color-brand-bright: var(--brand-bright);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-light: var(--brand-light);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-deep: var(--brand-deep);
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-soft: var(--surface-soft);
+  --color-border: var(--border);
+  --font-sans: var(--font-dm-sans);
+  --font-heading: var(--font-montserrat);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1rem 1.25rem;
+  background: var(--surface-dark);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0 0 0.5rem 0;
+}
+
+.skip-link:focus {
+  left: 0;
+  top: 0;
+}
+
+/* Hero: bright cyan field (reference: high-contrast lead form on saturated cyan) */
+.gradient-hero {
+  background: linear-gradient(165deg, #00e8f0 0%, var(--brand-bright) 38%, var(--brand) 72%, #0ea5a8 100%);
+}
+
+.gradient-cta {
+  background: linear-gradient(
+    120deg,
+    #5ee5e8 0%,
+    var(--brand) 45%,
+    #0d9488 100%
+  );
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    gap: 2rem;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
