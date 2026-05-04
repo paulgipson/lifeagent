@@ -15,20 +15,37 @@ const montserrat = Montserrat({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
+const ogTitle = `${site.name} | Life Insurance`;
+const ogImageAlt = `${paul.displayName} — ${site.name} life insurance`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} | Life Insurance`,
+    default: ogTitle,
     template: `%s | ${site.name}`,
   },
   description: site.tagline,
   openGraph: {
-    title: `${site.name} | Life Insurance`,
+    title: ogTitle,
     description: site.tagline,
     url: site.url,
     siteName: site.name,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/og.jpg",
+        width: 1024,
+        height: 690,
+        alt: ogImageAlt,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: ogTitle,
+    description: site.tagline,
+    images: ["/og.jpg"],
   },
 };
 
