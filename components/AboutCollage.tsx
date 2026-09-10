@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { AboutLicenses } from "@/components/AboutLicenses";
 import { PaulPortraitQuote } from "@/components/PaulPortraitQuote";
+import { QuoteCta } from "@/components/QuoteCta";
 
 export function AboutCollage() {
   return (
@@ -9,21 +9,21 @@ export function AboutCollage() {
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">About Paul Gipson</h2>
           <p className="mt-5 text-base leading-relaxed text-slate-600">
-            I&apos;m Paul Gipson. I built LifeAgentPaul to make insurance feel approachable—I combine licensed
+            I&apos;m Paul Gipson. I built LifeAgentPaul to make life insurance feel approachable—I combine licensed
             expertise with clear education so you understand premiums, death benefits, riders, and exclusions
-            before you sign.
+            before you sign. Below are the actual state licenses I hold, so you can verify them yourself.
           </p>
           <p className="mt-4 text-base leading-relaxed text-slate-600">
             Whether you&apos;re covering a mortgage, protecting your income, or building a legacy for your
             family, you get a roadmap from me—not a sales pitch.
           </p>
           <AboutLicenses />
-          <Link
-            href="/#contact"
-            className="mt-8 inline-flex rounded-lg border-2 border-brand px-5 py-3 text-sm font-semibold text-brand transition hover:bg-brand hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+          <QuoteCta
+            location="about"
+            className="mt-8 inline-flex min-h-[48px] items-center justify-center rounded-full bg-black px-7 text-xs font-bold uppercase tracking-[0.18em] text-brand-bright transition hover:bg-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand"
           >
-            Learn more
-          </Link>
+            Get my free quote
+          </QuoteCta>
         </div>
         <div className="md:pt-2">
           <PaulPortraitQuote />

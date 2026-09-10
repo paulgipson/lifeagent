@@ -3,7 +3,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { testimonialsSection } from "@/lib/content";
 
-const { kicker, items, intervalMs } = testimonialsSection;
+const { kicker, items, intervalMs, reviewsUrl } = testimonialsSection;
 
 function usePrefersReducedMotion(): boolean {
   return useSyncExternalStore(
@@ -32,6 +32,9 @@ export function TestimonialsSection() {
 
   const slidePct = (100 / items.length) * index;
   const transitionMs = reduceMotion ? 0 : 500;
+
+  // No real, attributable reviews yet → render nothing rather than placeholders.
+  if (items.length === 0) return null;
 
   return (
     <section id="testimonials" className="bg-white py-[1.625rem] md:py-[1.95rem]">
@@ -118,6 +121,16 @@ export function TestimonialsSection() {
               );
             })}
           </div>
+          {reviewsUrl ? (
+            <a
+              href={reviewsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block text-sm font-semibold text-black underline underline-offset-2 hover:no-underline"
+            >
+              Read all reviews
+            </a>
+          ) : null}
         </div>
       </div>
     </section>

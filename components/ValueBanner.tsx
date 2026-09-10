@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { QuoteCta } from "@/components/QuoteCta";
 import { valueBanner } from "@/lib/content";
 
 export function ValueBanner() {
@@ -10,18 +10,18 @@ export function ValueBanner() {
             {valueBanner.kicker}
           </p>
           <h2 className="font-heading mt-4 text-2xl font-bold leading-snug text-white sm:text-3xl md:text-[2rem] md:leading-tight">
-            <span>No app fees. No broker fees. </span>
-            <span className="text-brand-bright">I do the work for you.</span>
+            <span>{valueBanner.headlineA}</span>
+            <span className="text-brand-bright">{valueBanner.headlineB}</span>
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/85 sm:text-lg">
             {valueBanner.body}
           </p>
-          <Link
-            href="/#quote"
-            className="mt-8 inline-flex min-h-[48px] min-w-[200px] items-center justify-center rounded border-2 border-white px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-bright focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          <QuoteCta
+            location="value_banner"
+            className="mt-8 inline-flex min-h-[48px] min-w-[200px] items-center justify-center rounded-full bg-brand-bright px-8 py-3 text-xs font-bold uppercase tracking-[0.2em] text-black transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-bright focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           >
-            Get your free quote
-          </Link>
+            {valueBanner.cta}
+          </QuoteCta>
         </div>
       </div>
     </section>

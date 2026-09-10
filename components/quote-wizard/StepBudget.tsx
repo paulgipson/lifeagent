@@ -5,10 +5,12 @@ import { quoteFieldClass, quoteLabelClass, wizardStepBudget } from "@/lib/quoteW
 type Props = {
   value: number;
   onChange: (n: number) => void;
+  /** Override upper bound (e.g. final-expense shoppers) */
+  max?: number;
 };
 
-export function StepBudget({ value, onChange }: Props) {
-  const { min, max } = wizardStepBudget;
+export function StepBudget({ value, onChange, max = wizardStepBudget.max }: Props) {
+  const { min } = wizardStepBudget;
 
   function clamp(n: number) {
     return Math.min(max, Math.max(min, Math.round(n)));

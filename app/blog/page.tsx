@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
+
+/** Placeholder — hidden from nav and search until there are articles. */
+export const metadata: Metadata = {
+  title: "Blog",
+  robots: { index: false, follow: true },
+};
 
 export default function BlogPage() {
   return (

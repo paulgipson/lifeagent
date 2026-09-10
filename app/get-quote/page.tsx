@@ -7,6 +7,7 @@ import { quoteWizardMeta } from "@/lib/quoteWizardContent";
 export const metadata: Metadata = {
   title: quoteWizardMeta.title,
   description: quoteWizardMeta.description,
+  alternates: { canonical: "/get-quote" },
 };
 
 export default function GetQuotePage() {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { quoteFieldClass, quoteLabelClass, wizardStepContact } from "@/lib/quoteWizardContent";
 import type { ContactDobFields } from "@/lib/quoteWizardTypes";
 import { tcpaConsentCallsText, tcpaConsentSmsText } from "@/lib/legalContent";
-import { US_STATES } from "@/lib/us-states";
+import { licensedStateOptions, OTHER_STATE_VALUE } from "@/lib/licenses";
 
 type Props = {
   value: Pick<
@@ -70,7 +70,7 @@ export function StepContact({ value, onChange }: Props) {
             id="qf-phone"
             type="tel"
             autoComplete="tel"
-            inputMode="numeric"
+            inputMode="tel"
             value={value.phone}
             onChange={(e) => field("phone", e.target.value)}
             className={quoteFieldClass}
@@ -86,13 +86,20 @@ export function StepContact({ value, onChange }: Props) {
             onChange={(e) => field("state", e.target.value)}
             className={quoteFieldClass}
           >
-            {US_STATES.map((s) => (
-              <option key={s.value || "placeholder"} value={s.value}>
+            {licensedStateOptions.map((s) => (
+              <option key={s.value || "placeholder"} value={s.value} disabled={s.value === ""}>
                 {s.label}
               </option>
             ))}
           </select>
         </div>
+
+        {value.state === OTHER_STATE_VALUE && (
+          <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-snug text-amber-900 sm:col-span-2">
+            I&apos;m not licensed in your state yet. Send your request anyway and I&apos;ll personally connect you with a trusted
+            agent who is.
+          </p>
+        )}
 
         <div className="sm:col-span-2">
           <label className="flex cursor-pointer items-start gap-3 rounded-md border-2 border-brand/25 bg-white/80 p-4">

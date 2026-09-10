@@ -1,5 +1,7 @@
 /** Central copy and config — Paul Gipson, first person (see build.md). */
 
+import { licensedStateCodeList, licensedStates } from "@/lib/licenses";
+
 export const paul = {
   displayName: "Paul Gipson",
   brandName: "LifeAgentPaul",
@@ -8,18 +10,27 @@ export const paul = {
 export const site = {
   name: "LifeAgentPaul",
   tagline:
-    "I'm Paul Gipson—personal life insurance help from someone who works for you, not a script.",
+    "I'm Paul Gipson—a licensed life insurance agent who compares term, whole life, IUL, and final expense coverage from 15+ carriers so you get the right policy at the right price.",
+  /** SEO title for the homepage */
+  seoTitle: "Life Insurance Agent | Term, Whole Life, IUL & Final Expense Quotes",
   url: "https://lifeagentpaul.com",
   phone: "(424) 244-1061",
   /** E.164 — used for `tel:` links and structured data */
   phoneTel: "+14242441061",
+  /** Prefilled text so a lead can start a conversation in one tap */
+  smsBody: "Hi Paul, I just requested a life insurance quote on your site and I'd like to talk.",
   email: "hello@lifeagentpaul.com",
   /** Single line for footer / UI */
   address: "Los Angeles, CA",
   addressLocality: "Los Angeles",
   addressRegion: "CA",
   addressCountry: "US",
+  /** How fast a lead should expect to hear from Paul — used in copy; keep it honest. */
+  responsePromise: "within 1 business hour",
+  carrierCountLabel: "15+",
 } as const;
+
+export const licensedStateCount = licensedStates.length;
 
 export type NavItem = {
   id: string;
@@ -27,14 +38,20 @@ export type NavItem = {
   label: string;
 };
 
-/** Primary header/footer nav — one entry per destination. */
+/** Primary header/footer nav — one entry per destination. Blog is hidden until it has content. */
 export const primaryNav: readonly NavItem[] = [
-  { id: "carriers", href: "/#carriers", label: "Carriers I work with" },
-  { id: "services", href: "/#life", label: "Services" },
+  { id: "coverage", href: "/#coverage", label: "Coverage" },
+  { id: "how", href: "/#how-it-works", label: "How it works" },
   { id: "paul", href: "/#agent", label: "Meet Paul" },
-  { id: "about", href: "/#about", label: "About me" },
-  { id: "blog", href: "/blog", label: "Blog" },
+  { id: "faq", href: "/#faq", label: "FAQ" },
 ];
+
+/** Header / sticky-bar primary CTA */
+export const primaryCta = {
+  label: "Get my free quote",
+  shortLabel: "Get quote",
+  href: "/#quote",
+} as const;
 
 /** Dedupe by href (first wins) — use if merging nav from multiple sources. */
 export function dedupeNavByHref(items: readonly NavItem[]): NavItem[] {
@@ -47,162 +64,90 @@ export function dedupeNavByHref(items: readonly NavItem[]): NavItem[] {
 }
 
 export const hero = {
-  title: "A Smarter Way to Protect Your Life & Build Wealth",
-  sub:
-    "I help individuals and families protect what matters today while building long-term, tax-advantaged wealth through the right life insurance strategy.",
+  kicker: "Term · Whole Life · IUL · Final Expense",
+  title: "Life insurance that fits your budget—from a real agent, not a call center.",
+  sub: `I compare ${site.carrierCountLabel} top carriers, explain your options in plain English, and get you covered in one 15-minute call. No pressure, no jargon.`,
   bullets: [
-    "Personalized Coverage That Fits Your Budget",
-    "Straightforward Guidance — No Confusion",
-    "Ongoing Support (Not Just a One-Time Sale)",
+    "Quotes back within 24 hours—usually same day",
+    "No-medical-exam options for most ages and budgets",
+    `Licensed in ${licensedStateCount} states · ${site.carrierCountLabel} carriers compared for you`,
   ],
-  /** Social / discovery strip above logo row (hero). */
-  featuredTitle: "Life Agent Paul has been SEEN on:",
-};
+  formTitle: "Get your free quote",
+  formSub: "Takes about 60 seconds. I'll personally review it and reach out.",
+  submitLabel: "Get my free quote",
+  /** Trust strip under the hero copy */
+  trust: [
+    { value: `${licensedStateCount}`, label: "States licensed", detail: licensedStateCodeList },
+    { value: site.carrierCountLabel, label: "Carriers compared" },
+    { value: "1", label: "Agent, start to finish" },
+    { value: "$0", label: "Fees to work with me" },
+  ],
+} as const;
 
 export const coverageOptions = [
-  { value: "", label: "Select Insurance Type" },
+  { value: "", label: "What are you looking for?" },
   { value: "term-life", label: "Term life" },
   { value: "whole-life", label: "Whole life" },
-  { value: "universal-life", label: "Universal life" },
   { value: "iul", label: "Indexed universal life (IUL)" },
-  { value: "final-expense", label: "Final expense" },
-  { value: "other", label: "Other / not sure" },
+  { value: "final-expense", label: "Final expense / burial" },
+  { value: "other", label: "Not sure yet—help me choose" },
 ] as const;
 
+export type CoverageValue = (typeof coverageOptions)[number]["value"];
+
 export const valueBanner = {
-  /** Small kicker above the headline — edit to taste */
-  kicker: "THE DOORDASH OF INSURANCE",
+  kicker: `One agent. ${site.carrierCountLabel} carriers. Zero runaround.`,
+  headlineA: "You talk to me—",
+  headlineB: "not a call center.",
   body:
-    "I connect you with strong carriers, explain every option in plain English, and stay with you through enrollment—so you skip the runaround and get coverage that fits.",
+    "I shop the carriers, explain every option in plain English, and stay with you from application through approval. No fees to work with me, ever—carriers pay me, you don't.",
+  cta: "Compare my options",
 };
 
-export const lifeSection = {
-  heading: "Protect what matters most.",
-  body:
-    "Life insurance is about the people who depend on you. I work with leading carriers to match term, permanent, or final expense coverage to your goals and budget—no cookie-cutter quotes.",
-  callout: "There's not a plan or product I can't source for you.",
-  coverage: [
-    {
-      title: "Term life",
-      description: "Affordable protection for a set period—ideal for income replacement and major obligations.",
-    },
-    {
-      title: "Whole & universal life",
-      description: "Lifelong coverage with cash value options you can understand before you commit.",
-    },
-    {
-      title: "Final expense",
-      description: "Simpler policies designed to cover end-of-life costs for peace of mind.",
-    },
-  ] as const,
-};
-
-/** Advanced / accumulation products (IUL, annuities, etc.). */
-export const advancedMarketsSection = {
-  heading: "Advanced market options—built around your goals.",
-  body:
-    "When you're ready to go beyond basic protection, I help you navigate indexed products and annuities with straight talk: caps, floors, fees, and how they fit your tax picture and retirement income plan.",
-  callout: "If it grows your legacy or your income, I'll help you understand it before you sign.",
-  coverage: [
-    {
-      title: "Indexed Universal Life (IUL)",
-      description:
-        "Cash value growth tied to an index—with a floor that limits downside in many designs. I walk you through caps, participation rates, and how loans or withdrawals can work.",
-    },
-    {
-      title: "Fixed indexed annuities (FIA)",
-      description:
-        "Principal protection with growth linked to indexes; I compare crediting methods, surrender periods, and income riders so you know what you're locking in.",
-    },
-    {
-      title: "Variable & traditional annuities",
-      description:
-        "From variable annuities with investment subaccounts to fixed and immediate income annuities—I'll spell out fees, guarantees, and payout options in plain English.",
-    },
-    {
-      title: "Income & legacy riders",
-      description:
-        "Guaranteed lifetime withdrawal benefit (GLWB) and death benefit riders—when they help, when they don't, and what they cost.",
-    },
-    {
-      title: "1035 exchanges & tax-aware moves",
-      description:
-        "When a tax-free exchange or repositioning an old policy makes sense—and when it doesn't—I map the tradeoffs before you move a dollar.",
-    },
-  ] as const,
-};
+/** Coverage grid (#coverage) — one card per product, linking to its landing page. */
+export const coverageSection = {
+  kicker: "Coverage",
+  heading: "Four ways to protect the people you love",
+  intro: "Not sure which one fits? Pick the closest and I'll walk you through the rest on our call.",
+  ctaLabel: "Learn more",
+  quoteLabel: "Get a quote",
+} as const;
 
 /** Lifestyle block: image left, story right (#why-us) */
 export const lifestyleStory = {
   kicker: "PEOPLE OVER PROFITS",
-  heading: "Paul Gipson isn't your average insurance agent—get ready to level up.",
+  heading: "You won't get a random rep reading a script. You get me.",
   paragraphs: [
-    "I believe in more than dropping a policy in your inbox. Insurance should create room to breathe—so when life throws a curveball, you're protected, not panicking.",
-    "You won't get a random rep reading a script. You get me—Paul Gipson—on your side: straight answers, options that fit your budget, and someone who picks up when you call.",
+    "Insurance should create room to breathe—so when life throws a curveball, your family is protected, not panicking.",
     "I shop multiple carriers and explain what you're actually buying—premiums, payouts, exclusions, and the fine print—before you sign anything.",
-    "If you're ready to level up how you protect your family and your future, I'm ready to earn your trust. Tap below and I'll reach out personally.",
+    "And I pick up when you call. After the policy is issued, I'm still your agent: beneficiary changes, questions, reviews when life changes.",
   ],
 };
 
 /** Agent difference: text left, portrait right (#agent) */
 export const agentDifference = {
-  kicker: "WHY CHOOSE ME?",
-  heading: "Discover the LifeAgentPaul difference",
+  kicker: "MEET PAUL",
+  heading: "Licensed, accountable, and on your side",
   paragraphs: [
-    "LifeAgentPaul isn't a faceless brand—it's how I work as an individual agent: licensed, accountable, and focused on long-term relationships, not one-off sales.",
-    "My name is on the line every time I recommend a plan. I'll walk you through life and advanced-market options in plain English, then stay available as your needs evolve.",
+    `I'm Paul Gipson, a licensed life insurance producer (NPN 21670586) serving families in ${licensedStateCount} states. LifeAgentPaul isn't a brand with a sales floor behind it—it's me.`,
+    "My name is on the line every time I recommend a plan. I'll show you term, whole life, IUL, and final expense options side by side, tell you which one I'd pick for your situation and why, and then stay available as your needs evolve.",
   ],
   quote:
     "I'll help you stay protected when life changes—and I'll answer when you call. Your family's future is a relationship to me, not a one-time sale.",
   quoteAttribution: "Paul Gipson",
 };
 
-/** Homepage testimonial carousel (auto-advances every `intervalMs` unless reduced motion) */
+/**
+ * Homepage testimonials. Leave `items` empty until you have real, attributable reviews
+ * (e.g. copied from your Google Business Profile with the reviewer's consent). The section
+ * hides itself when there are no items. Never publish invented reviews — FTC rules apply.
+ */
 export const testimonialsSection = {
-  kicker: "CUSTOMER TESTIMONIALS",
-  intervalMs: 5000,
-  items: [
-    {
-      quote:
-        "The application process was smooth, and Paul was a true professional throughout—clear, patient, and on top of every detail.",
-      author: "Jason S.",
-      verifiedLabel: "Verified Review",
-    },
-    {
-      quote:
-        "Paul explained our options without pressure and helped us pick coverage that actually fit our budget. I finally felt like someone was on our side.",
-      author: "Maria R.",
-      verifiedLabel: "Verified Review",
-    },
-    {
-      quote:
-        "I had questions after enrollment—Paul picked up and walked me through it. That kind of follow-through is rare.",
-      author: "David K.",
-      verifiedLabel: "Verified Review",
-    },
-  ],
-} as const;
-
-/** Services / “next level” three-up cards */
-export const servicesHighlight = {
-  kicker: "SERVICES",
-  heading: "Taking insurance to the next level",
-  intro:
-    "You work with me—not a script. Here's how I help you move from confused to confident.",
-  cards: [
-    {
-      title: "Comprehensive plans",
-      body: "Life and advanced-market options—matched to what you actually need, not a one-size-fits-all quote.",
-    },
-    {
-      title: "Expert consultation",
-      body: "Straight answers from a licensed agent: I'll help you compare carriers, policy designs, and costs until the decision feels right for your family.",
-    },
-    {
-      title: "Hassle-free policy support",
-      body: "Enrollment, paperwork, and follow-ups—I'll stay in the loop so you're never guessing what happens next.",
-    },
-  ] as const,
+  kicker: "WHAT CLIENTS SAY",
+  intervalMs: 6000,
+  /** Public reviews URL (Google Business Profile). Shown as "Read all reviews" when set. */
+  reviewsUrl: "",
+  items: [] as readonly { quote: string; author: string; verifiedLabel: string }[],
 };
 
 /** Black value banner — benefit lines */
@@ -211,7 +156,7 @@ export const stats = {
   items: [
     { line: "Simplified Life Insurance Strategies" },
     { line: "Fast Approvals (No Hassle)" },
-    { line: "Access to Top-Rated Carriers" },
+    { line: `Access to ${site.carrierCountLabel} Top-Rated Carriers` },
     { line: "Guided Step-by-Step Support" },
   ],
 } as const;
@@ -219,23 +164,68 @@ export const stats = {
 /** How it works — three steps + intro */
 export const howItWorksSection = {
   kicker: "HOW IT WORKS",
-  heading: "Protect your loved ones in 3 simple steps",
-  intro:
-    "At LifeAgentPaul, my mission is to make life insurance simple, accessible, and tailored to your unique requirements.",
-  ctaText: "Click here to get started today!",
+  heading: "Covered in 3 simple steps",
+  intro: "No fees, no obligation, and you can stop at any step.",
+  ctaText: "Start step 1 now",
   ctaHref: "/#quote",
   steps: [
     {
       stepLabel: "STEP 1",
-      body: "Fill out a quick questionnaire and let me know your needs.",
+      title: "Tell me about you",
+      body: "60 seconds: who you're protecting, your budget, and the best way to reach you.",
     },
     {
       stepLabel: "STEP 2",
-      body: "I craft a range of policies tailored to fit your needs and budget—no cookie-cutter quotes.",
+      title: "I compare carriers & call you",
+      body: `I run your numbers across ${site.carrierCountLabel} carriers and call ${site.responsePromise}—or pick a time on my calendar that suits you.`,
     },
     {
       stepLabel: "STEP 3",
-      body: "Apply with no broker fees—I stay with you through the application until you're covered.",
+      title: "Apply in one call",
+      body: "We pick the plan together and I handle the application and follow-ups until your policy is in force.",
     },
   ],
+} as const;
+
+/** Homepage FAQ (#faq) — objections that block form fills. */
+export const homeFaq = {
+  kicker: "FAQ",
+  heading: "Questions I get every day",
+  items: [
+    {
+      q: "How much does life insurance cost?",
+      a: "It depends on your age, health, coverage amount, and policy type. Healthy 30-somethings often find 20-year term coverage for less than a streaming subscription each month; final expense plans for seniors typically run from roughly $30–$100 per month. I'll show you real numbers from multiple carriers so you can see the range for your situation.",
+    },
+    {
+      q: "Do I need a medical exam?",
+      a: "Often, no. Many carriers offer no-exam term, whole life, and final expense policies based on a few health questions and a phone interview. If an exam would get you a meaningfully better rate, I'll tell you and let you decide.",
+    },
+    {
+      q: "Can I get covered with diabetes, high blood pressure, or another condition?",
+      a: "Usually yes. Different carriers treat conditions differently, which is exactly why I shop more than one. Final expense and guaranteed-issue plans are also available for people who have been declined elsewhere.",
+    },
+    {
+      q: "What's the difference between term, whole life, and IUL?",
+      a: "Term covers you for a set period (10–30 years) at the lowest cost. Whole life lasts your entire life with fixed premiums and guaranteed cash value. IUL is permanent coverage whose cash value grows based on a market index with a floor against losses—useful for tax-advantaged accumulation. We'll figure out which fits your goal and budget on our call.",
+    },
+    {
+      q: "How fast can I get covered?",
+      a: "Some no-exam policies can be approved the same day you apply. Fully underwritten policies typically take two to six weeks. I'll set expectations up front based on the carrier we choose.",
+    },
+    {
+      q: "What happens after I submit the form?",
+      a: `I personally review your request and reach out ${site.responsePromise} during business hours. You can also book a specific time on my calendar or call me directly at ${site.phone}. There's no fee and no obligation.`,
+    },
+    {
+      q: "Do you charge a fee?",
+      a: "No. I'm paid by the insurance carrier when a policy is placed, so my help—quotes, comparisons, application support—costs you nothing.",
+    },
+  ],
+} as const;
+
+/** Final CTA with embedded form at the bottom of the homepage */
+export const bottomCta = {
+  kicker: "Ready when you are",
+  heading: "Get your free quote—I'll take it from here.",
+  sub: `Fill this out and I'll personally reach out ${site.responsePromise}. Prefer to talk now? Call ${site.phone}.`,
 } as const;

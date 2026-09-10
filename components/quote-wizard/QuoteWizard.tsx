@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ContactDobFields } from "@/lib/quoteWizardTypes";
 import { StepBeneficiary } from "@/components/quote-wizard/StepBeneficiary";
@@ -9,12 +9,15 @@ import { StepConditions } from "@/components/quote-wizard/StepConditions";
 import { StepContact } from "@/components/quote-wizard/StepContact";
 import { StepDob } from "@/components/quote-wizard/StepDob";
 import { StepGoal } from "@/components/quote-wizard/StepGoal";
-import { StepVerify } from "@/components/quote-wizard/StepVerify";
 import { WizardProgress } from "@/components/quote-wizard/WizardProgress";
-import { formatPhoneDisplay, validateContact, validateDob } from "@/lib/quoteWizardValidate";
+import { validateContact, validateDob } from "@/lib/quoteWizardValidate";
+import { quoteWizardMeta, wizardProgressSteps, wizardStepBudget } from "@/lib/quoteWizardContent";
+import { submitLead, thankYouQuery } from "@/lib/leads";
+import { track } from "@/lib/analytics";
+import { site } from "@/lib/content";
 
-/** Last wizard step index (verify). Successful Continue → `/thank-you`. */
-const VERIFY_STEP = 6;
+/** Last wizard step index (contact). Successful submit → `/thank-you`. */
+const CONTACT_STEP = wizardProgressSteps.length - 1;
 
 function ContinueIcon() {
   return (
@@ -37,10 +40,20 @@ const emptyContactDob = (): ContactDobFields => ({
   consentSms: false,
 });
 
+/** Map wizard goals to the coverage taxonomy used by the short form / product pages. */
+function coverageFromGoals(goals: Set<string>): string {
+  if (goals.size === 1 && goals.has("final-expenses")) return "final-expense";
+  if (goals.has("grow-wealth-tax-free")) return "iul";
+  if (goals.has("final-expenses")) return "final-expense";
+  if (goals.has("protect-mortgage-assets") || goals.has("protect-loved-ones")) return "term-life";
+  return "other";
+}
+
 export function QuoteWizard() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [formError, setFormError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const [goals, setGoals] = useState<Set<string>>(new Set());
   const [beneficiary, setBeneficiary] = useState("");
@@ -48,7 +61,14 @@ export function QuoteWizard() {
   const [budget, setBudget] = useState(100);
   const [contactDob, setContactDob] = useState<ContactDobFields>(emptyContactDob);
   const [preExisting, setPreExisting] = useState("");
-  const [verifyDigits, setVerifyDigits] = useState<[string, string, string, string]>(["", "", "", ""]);
+  const [tobacco, setTobacco] = useState("");
+
+  useEffect(() => {
+    track("wizard_step", { step, step_id: wizardProgressSteps[step]?.id });
+  }, [step]);
+
+  const finalExpenseOnly = goals.size === 1 && goals.has("final-expenses");
+  const budgetMax = finalExpenseOnly ? wizardStepBudget.finalExpenseMax : wizardStepBudget.max;
 
   const toggleGoal = useCallback((id: string) => {
     setGoals((prev) => {
@@ -80,30 +100,59 @@ export function QuoteWizard() {
       case 3:
         return validateDob(contactDob.birthMonth, contactDob.birthDay, contactDob.birthYear);
       case 4:
-        return !preExisting ? "Please select an option for pre-existing conditions." : null;
+        if (!preExisting) return "Please select an option for pre-existing conditions.";
+        if (!tobacco) return "Please answer the tobacco question.";
+        return null;
       case 5:
         return validateContact(contactDob);
-      case 6:
-        return verifyDigits.every((d) => d.length === 1 && /\d/.test(d))
-          ? null
-          : "Please enter the 4-digit verification code.";
       default:
         return null;
     }
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     const err = validationMessageForStep(step);
     if (err) {
       setFormError(err);
       return;
     }
     setFormError(null);
-    if (step === VERIFY_STEP) {
-      router.push("/thank-you");
+
+    if (step !== CONTACT_STEP) {
+      if (step === 2) setBudget((b) => Math.min(b, budgetMax));
+      setStep((prev) => prev + 1);
       return;
     }
-    setStep((prev) => prev + 1);
+
+    setSubmitting(true);
+    const coverage = coverageFromGoals(goals);
+    const lead = {
+      source: "wizard" as const,
+      firstName: contactDob.firstName.trim(),
+      lastName: contactDob.lastName.trim(),
+      email: contactDob.email.trim(),
+      phone: contactDob.phone.trim(),
+      state: contactDob.state,
+      coverage,
+      goals: [...goals],
+      beneficiary: beneficiary === "other" ? `other: ${beneficiaryOther.trim()}` : beneficiary,
+      monthlyBudget: budget,
+      dateOfBirth: `${contactDob.birthYear}-${contactDob.birthMonth.padStart(2, "0")}-${contactDob.birthDay.padStart(2, "0")}`,
+      healthConditions: preExisting,
+      tobacco,
+      consentCalls: contactDob.consentCalls,
+      consentSms: contactDob.consentSms,
+    };
+    track("form_submit", { source: "wizard", coverage, state: lead.state });
+    const result = await submitLead(lead);
+    setSubmitting(false);
+    if (!result.ok) {
+      setFormError(`${result.message} You can also call me at ${site.phone}.`);
+      return;
+    }
+    track("wizard_complete", { coverage });
+    track("lead", { source: "wizard", coverage, out_of_footprint: result.outOfFootprint });
+    router.push(`/thank-you${thankYouQuery(lead)}`);
   }
 
   function handleBack() {
@@ -111,10 +160,13 @@ export function QuoteWizard() {
     if (step > 0) setStep((s) => s - 1);
   }
 
-  const phoneDisplay = formatPhoneDisplay(contactDob.phone);
+  const isLast = step === CONTACT_STEP;
 
   return (
     <>
+      <p className="bg-brand-muted/40 py-2 text-center text-xs font-semibold uppercase tracking-[0.18em] text-black/70">
+        {quoteWizardMeta.timeHint} · Step {step + 1} of {wizardProgressSteps.length}
+      </p>
       <WizardProgress currentStep={step} />
       <div className="mx-auto max-w-5xl px-[clamp(1rem,4vw,2rem)] py-12 md:py-16">
         {step === 0 && <StepGoal selected={goals} onToggle={toggleGoal} />}
@@ -132,7 +184,7 @@ export function QuoteWizard() {
             }}
           />
         )}
-        {step === 2 && <StepBudget value={budget} onChange={setBudget} />}
+        {step === 2 && <StepBudget value={Math.min(budget, budgetMax)} onChange={setBudget} max={budgetMax} />}
         {step === 3 && (
           <StepDob
             value={{
@@ -143,7 +195,20 @@ export function QuoteWizard() {
             onChange={patchContactDob}
           />
         )}
-        {step === 4 && <StepConditions value={preExisting} onChange={(id) => { setPreExisting(id); setFormError(null); }} />}
+        {step === 4 && (
+          <StepConditions
+            value={preExisting}
+            onChange={(id) => {
+              setPreExisting(id);
+              setFormError(null);
+            }}
+            tobacco={tobacco}
+            onTobaccoChange={(id) => {
+              setTobacco(id);
+              setFormError(null);
+            }}
+          />
+        )}
         {step === 5 && (
           <StepContact
             value={{
@@ -158,20 +223,6 @@ export function QuoteWizard() {
             onChange={patchContactDob}
           />
         )}
-        {step === 6 && (
-          <StepVerify
-            phoneDisplay={phoneDisplay}
-            digits={verifyDigits}
-            onDigitsChange={(d) => {
-              setVerifyDigits(d);
-              setFormError(null);
-            }}
-            onEditPhone={() => {
-              setStep(5);
-              setFormError(null);
-            }}
-          />
-        )}
         {formError && (
           <p className="mt-8 text-center text-sm font-medium text-red-700" role="alert">
             {formError}
@@ -183,7 +234,8 @@ export function QuoteWizard() {
             <button
               type="button"
               onClick={handleBack}
-              className="order-2 min-h-[48px] w-full min-w-[160px] rounded-lg border-2 border-black bg-white px-8 py-3 text-sm font-bold uppercase tracking-[0.18em] text-black transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:order-1 sm:w-auto"
+              disabled={submitting}
+              className="order-2 min-h-[48px] w-full min-w-[160px] rounded-lg border-2 border-black bg-white px-8 py-3 text-sm font-bold uppercase tracking-[0.18em] text-black transition hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand disabled:opacity-50 sm:order-1 sm:w-auto"
             >
               Back
             </button>
@@ -192,13 +244,22 @@ export function QuoteWizard() {
           <button
             type="button"
             onClick={handleContinue}
-            disabled={step === 0 && goals.size < 1}
-            className="order-1 flex min-h-[48px] w-full min-w-[200px] items-center justify-center gap-2 rounded-lg bg-black px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] text-brand transition hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-45 sm:order-2 sm:w-auto"
+            disabled={submitting || (step === 0 && goals.size < 1)}
+            className="order-1 flex min-h-[48px] w-full min-w-[200px] items-center justify-center gap-2 rounded-lg bg-black px-10 py-4 text-sm font-bold uppercase tracking-[0.2em] text-brand-bright transition hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-45 sm:order-2 sm:w-auto"
           >
-            Continue
-            <ContinueIcon />
+            {submitting ? "Sending…" : isLast ? "Get my free quote" : "Continue"}
+            {!submitting && <ContinueIcon />}
           </button>
         </div>
+
+        {isLast && (
+          <p className="mt-6 text-center text-xs text-black/60">
+            Prefer to talk now?{" "}
+            <a href={`tel:${site.phoneTel}`} className="font-semibold text-brand underline underline-offset-2" onClick={() => track("phone_click", { location: "wizard" })}>
+              Call {site.phone}
+            </a>
+          </p>
+        )}
       </div>
     </>
   );

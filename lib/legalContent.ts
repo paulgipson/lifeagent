@@ -4,6 +4,7 @@
  */
 
 import { paul, site } from "@/lib/content";
+import { licensedStateNameSentence } from "@/lib/licenses";
 
 export const legalMeta = {
   lastUpdatedLabel: "Last updated: April 16, 2026",
@@ -13,7 +14,7 @@ export const legalMeta = {
 export const footerBrandDisclaimer = `${site.tagline} Insurance products are offered through ${paul.displayName}, a licensed insurance producer. ${site.name} is not an insurance carrier.`;
 
 /** Footer bar — regulatory / product disclaimer */
-export const footerRegulatoryDisclaimer = `${paul.displayName} is licensed as an insurance producer in California. Products, features, and rates are subject to carrier approval and availability; not all products are available in all states. This site is for marketing and general information; it is not legal, tax, or investment advice.`;
+export const footerRegulatoryDisclaimer = `${paul.displayName} is licensed as a life insurance producer in ${licensedStateNameSentence}. Products, features, and rates are subject to carrier approval and availability; not all products are available in all states. This site is for marketing and general information; it is not legal, tax, or investment advice. Testimonials, when shown, are from real clients and are not paid.`;
 
 /** National Producer Number (NAIC) — https://nipr.com */
 export const nationalProducerNumber = "21670586";

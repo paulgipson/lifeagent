@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { primaryNav, site } from "@/lib/content";
+import { QuoteCta } from "@/components/QuoteCta";
 import { footerBrandDisclaimer, footerLicenseLines, footerRegulatoryDisclaimer } from "@/lib/legalContent";
 
 const legal = [
@@ -67,9 +68,12 @@ export function SiteFooter() {
               </li>
               <li>{site.address}</li>
             </ul>
-            <p className="mt-6 text-xs text-slate-500">
-              Social links: add icons only for profiles you actively maintain.
-            </p>
+            <QuoteCta
+              location="footer"
+              className="mt-6 inline-flex min-h-[44px] items-center justify-center rounded-full bg-brand-bright px-6 text-xs font-bold uppercase tracking-[0.16em] text-black transition hover:bg-white"
+            >
+              Get my free quote
+            </QuoteCta>
           </div>
         </div>
         <div className="mt-12 flex flex-col gap-3 border-t border-slate-800 pt-8 text-xs text-slate-500 sm:flex-row sm:items-start sm:justify-between sm:gap-8">

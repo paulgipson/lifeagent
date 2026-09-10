@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { licenseEntries, type LicenseEntry } from "@/lib/licenses";
+import { licensedStates, type LicenseEntry } from "@/lib/licenses";
 
 export function AboutLicenses() {
   const [selected, setSelected] = useState<LicenseEntry | null>(null);
@@ -32,22 +32,31 @@ export function AboutLicenses() {
         Licenses by state
       </h3>
       <p className="mt-2 text-sm leading-relaxed text-slate-600 md:text-[15px]">
-        I&apos;m licensed for life insurance in the states below. Select a state to view the credential
-        image.
+        I&apos;m licensed for life insurance in the {licensedStates.length} states below. Select a state with an
+        underline to view the credential image.
       </p>
       <ul className="mt-5 flex flex-wrap gap-2.5" role="list">
-        {licenseEntries.map((lic) => (
-          <li key={lic.stateCode} role="listitem">
-            <button
-              type="button"
-              onClick={() => setSelected(lic)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50/80 px-3.5 py-2 text-left text-sm font-semibold text-foreground shadow-sm transition hover:border-brand/40 hover:bg-brand-muted/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
-            >
-              <span>{lic.stateName}</span>
-              <span className="font-medium text-slate-500">{lic.stateCode}</span>
-            </button>
-          </li>
-        ))}
+        {licensedStates.map((lic) =>
+          lic.src ? (
+            <li key={lic.stateCode} role="listitem">
+              <button
+                type="button"
+                onClick={() => setSelected(lic as LicenseEntry)}
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50/80 px-3.5 py-2 text-left text-sm font-semibold text-foreground underline decoration-brand/40 decoration-2 underline-offset-4 shadow-sm transition hover:border-brand/40 hover:bg-brand-muted/50 hover:decoration-brand focus:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+              >
+                <span>{lic.stateName}</span>
+                <span className="font-medium text-slate-500">{lic.stateCode}</span>
+              </button>
+            </li>
+          ) : (
+            <li key={lic.stateCode} role="listitem">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50/80 px-3.5 py-2 text-left text-sm font-semibold text-foreground shadow-sm">
+                <span>{lic.stateName}</span>
+                <span className="font-medium text-slate-500">{lic.stateCode}</span>
+              </span>
+            </li>
+          ),
+        )}
       </ul>
 
       {selected ? (

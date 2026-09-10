@@ -30,6 +30,7 @@ export function ThankYouTestimonialBlock() {
   }, [reduceMotion]);
 
   const active = items[index] ?? items[0];
+  if (!active) return null;
 
   return (
     <section className="bg-white py-10 md:py-12">

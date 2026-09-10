@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { primaryNav, site } from "@/lib/content";
+import { primaryCta, primaryNav, site } from "@/lib/content";
+import { QuoteCta } from "@/components/QuoteCta";
+import { track } from "@/lib/analytics";
 
 function PhoneIcon({ className }: { className?: string }) {
   return (
@@ -22,14 +24,14 @@ function LogoLockup() {
       className="group flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-bright rounded-md"
     >
       <div
-        className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-brand-bright to-brand shadow-sm ring-1 ring-white/30"
+        className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-brand-bright to-brand shadow-sm ring-1 ring-white/30 md:h-11 md:w-11"
         aria-hidden
       >
         <span className="text-xl font-black leading-none text-black">P</span>
       </div>
-      <div className="hidden leading-none sm:block">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white">Life insurance</p>
-        <p className="mt-1 font-heading text-[1.05rem] font-extrabold tracking-tight text-white md:text-lg">
+      <div className="leading-none">
+        <p className="hidden text-[10px] font-semibold uppercase tracking-[0.22em] text-white sm:block">Life insurance</p>
+        <p className="font-heading text-[1rem] font-extrabold tracking-tight text-white sm:mt-1 md:text-lg">
           LIFE<span className="text-brand-bright">AGENT</span>PAUL
         </p>
       </div>
@@ -37,25 +39,29 @@ function LogoLockup() {
   );
 }
 
-function PhoneBlock({ className, onClick }: { className?: string; onClick?: () => void }) {
+function PhoneBlock({ className, onClick, compact = false }: { className?: string; onClick?: () => void; compact?: boolean }) {
   return (
     <a
       href={`tel:${site.phoneTel}`}
       className={`flex items-center gap-3 ${className ?? ""}`}
       data-analytics="phone_click"
-      onClick={onClick}
+      aria-label={`Call ${site.phone}`}
+      onClick={() => {
+        track("phone_click", { location: "header" });
+        onClick?.();
+      }}
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-brand-bright text-black shadow-inner">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-bright text-black shadow-inner md:h-11 md:w-11">
         <PhoneIcon className="h-5 w-5" />
       </span>
-      <div className="min-w-0 text-left">
-        <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-white">
-          Call me today
-        </p>
-        <p className="mt-1.5 whitespace-nowrap text-sm font-bold leading-none tracking-tight text-white tabular-nums md:text-base">
-          {site.phone}
-        </p>
-      </div>
+      {!compact && (
+        <div className="min-w-0 text-left">
+          <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-white">Call or text</p>
+          <p className="mt-1.5 whitespace-nowrap text-sm font-bold leading-none tracking-tight text-white tabular-nums md:text-base">
+            {site.phone}
+          </p>
+        </div>
+      )}
     </a>
   );
 }
@@ -68,7 +74,7 @@ export function SiteHeader() {
       id="top"
       className="sticky top-0 z-50 border-b border-brand bg-black text-white shadow-md shadow-black/40"
     >
-      <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-[clamp(1rem,3vw,2rem)] py-3 md:gap-4 md:py-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-3 px-[clamp(1rem,3vw,2rem)] py-3 md:gap-4 md:py-3.5">
         <div className="min-w-0 shrink-0">
           <LogoLockup />
         </div>
@@ -89,7 +95,14 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
-          <PhoneBlock className="hidden sm:flex" />
+          <PhoneBlock className="hidden md:flex" />
+          <PhoneBlock className="md:hidden" compact />
+          <QuoteCta
+            location="header"
+            className="hidden items-center justify-center whitespace-nowrap rounded-full bg-brand-bright px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.14em] text-black shadow-sm transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:inline-flex md:text-xs"
+          >
+            {primaryCta.label}
+          </QuoteCta>
           <button
             type="button"
             className="inline-flex items-center justify-center rounded-md border border-white/20 p-2.5 text-white lg:hidden"
@@ -129,6 +142,13 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <QuoteCta
+              location="mobile_nav"
+              onActivate={() => setOpen(false)}
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-brand-bright px-5 py-3 text-xs font-bold uppercase tracking-[0.14em] text-black"
+            >
+              {primaryCta.label}
+            </QuoteCta>
             <PhoneBlock
               className="mt-3 rounded-md border border-white/15 px-3 py-3"
               onClick={() => setOpen(false)}

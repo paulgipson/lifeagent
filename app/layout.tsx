@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { DM_Sans, Montserrat } from "next/font/google";
 import "./globals.css";
 import { paul, site } from "@/lib/content";
+import { licensedStates } from "@/lib/licenses";
+import { Analytics } from "@/components/Analytics";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -15,7 +17,7 @@ const montserrat = Montserrat({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
-const ogTitle = `${site.name} | Life Insurance`;
+const ogTitle = `${site.seoTitle} | ${site.name}`;
 const ogImageAlt = `${paul.displayName} — ${site.name} life insurance`;
 
 export const metadata: Metadata = {
@@ -25,6 +27,7 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description: site.tagline,
+  alternates: { canonical: "/" },
   openGraph: {
     title: ogTitle,
     description: site.tagline,
@@ -57,12 +60,17 @@ const jsonLd = {
   url: site.url,
   telephone: site.phoneTel,
   email: site.email,
+  image: `${site.url}/paul-gipson.png`,
+  priceRange: "Free consultation",
   address: {
     "@type": "PostalAddress",
     addressLocality: site.addressLocality,
     addressRegion: site.addressRegion,
     addressCountry: site.addressCountry,
   },
+  areaServed: licensedStates.map((l) => ({ "@type": "State", name: l.stateName })),
+  founder: { "@type": "Person", name: paul.displayName },
+  knowsAbout: ["Term life insurance", "Whole life insurance", "Indexed universal life insurance", "Final expense insurance"],
 };
 
 export default function RootLayout({
@@ -81,6 +89,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         {children}
+        <Analytics />
       </body>
     </html>
   );

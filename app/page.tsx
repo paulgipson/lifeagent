@@ -1,41 +1,44 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { HeroSection } from "@/components/HeroSection";
 import { ValueBanner } from "@/components/ValueBanner";
-import { FeatureSplitLife } from "@/components/FeatureSplitLife";
+import { HowItWorks } from "@/components/HowItWorks";
+import { CoverageGrid } from "@/components/CoverageGrid";
 import { PartnerLogoMarquee } from "@/components/PartnerLogoMarquee";
-import { FeatureSplitAdvancedMarkets } from "@/components/FeatureSplitAdvancedMarkets";
 import { LifestyleSplit } from "@/components/LifestyleSplit";
 import { AgentSpotlight } from "@/components/AgentSpotlight";
-import { MidPageCta } from "@/components/MidPageCta";
-import { TestimonialsSection } from "@/components/TestimonialsSection";
-import { ValuePillars } from "@/components/ValuePillars";
 import { AboutCollage } from "@/components/AboutCollage";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { StatsBar } from "@/components/StatsBar";
-import { HowItWorks } from "@/components/HowItWorks";
+import { HomeFaq } from "@/components/HomeFaq";
+import { BottomCta } from "@/components/BottomCta";
 import { SiteFooter } from "@/components/SiteFooter";
-import { partnerLogosRow1, partnerLogosRow2 } from "@/lib/partnerLogos";
+import { MobileStickyBar } from "@/components/MobileStickyBar";
+import { partnerLogos } from "@/lib/partnerLogos";
 
+/**
+ * Conversion-ordered homepage:
+ * hero + form → proof → how it works → products → carriers → why Paul → about/licenses → reviews → FAQ → final form
+ */
 export default function Home() {
   return (
     <>
       <SiteHeader />
       <main id="main">
         <HeroSection />
+        <PartnerLogoMarquee id="carriers" logos={partnerLogos} showLabel />
         <ValueBanner />
-        <FeatureSplitLife />
-        <PartnerLogoMarquee id="carriers" logos={partnerLogosRow1} showLabel />
-        <FeatureSplitAdvancedMarkets />
-        <PartnerLogoMarquee id="carriers-2" logos={partnerLogosRow2} />
+        <HowItWorks />
+        <CoverageGrid />
         <LifestyleSplit />
         <AgentSpotlight />
-        <MidPageCta />
-        <TestimonialsSection />
-        <ValuePillars />
         <AboutCollage />
+        <TestimonialsSection />
         <StatsBar />
-        <HowItWorks />
+        <HomeFaq />
+        <BottomCta />
       </main>
       <SiteFooter />
+      <MobileStickyBar />
     </>
   );
 }

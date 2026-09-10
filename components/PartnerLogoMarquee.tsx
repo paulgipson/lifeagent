@@ -13,7 +13,7 @@ export function PartnerLogoMarquee({
   logos,
   id,
   showLabel = false,
-  label = "Access to 15+ Top Insurance Companies",
+  label = "I compare 15+ top-rated carriers for you — including",
 }: Props) {
   const loop = [...logos, ...logos];
 
