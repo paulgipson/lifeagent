@@ -9,7 +9,7 @@ import { licensedStateOptions, OTHER_STATE_VALUE } from "@/lib/licenses";
 type Props = {
   value: Pick<
     ContactDobFields,
-    "firstName" | "lastName" | "email" | "phone" | "state" | "consentCalls" | "consentSms"
+    "firstName" | "lastName" | "email" | "phone" | "state" | "consentCalls" | "consentSms" | "sex"
   >;
   onChange: (patch: Partial<Props["value"]>) => void;
 };
@@ -100,6 +100,24 @@ export function StepContact({ value, onChange }: Props) {
             agent who is.
           </p>
         )}
+
+        <div className="sm:col-span-2">
+          <label htmlFor="qf-sex" className={quoteLabelClass}>
+            Sex
+          </label>
+          <select
+            id="qf-sex"
+            value={value.sex}
+            onChange={(e) => field("sex", e.target.value as ContactDobFields["sex"])}
+            className={quoteFieldClass}
+          >
+            <option value="" disabled>
+              Select male or female
+            </option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
 
         <div className="sm:col-span-2">
           <label className="flex cursor-pointer items-start gap-3 rounded-md border-2 border-brand/25 bg-white/80 p-4">

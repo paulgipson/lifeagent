@@ -50,13 +50,37 @@ export function validateDob(month: string, day: string, year: string): string | 
   return null;
 }
 
+/** Age in whole years from an ISO `YYYY-MM-DD` date, or null if invalid. */
+export function ageFromIsoDate(iso: string): number | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
+  if (!m) return null;
+  if (!isValidDob(m[2], m[3], m[1])) return null;
+  const yi = parseInt(m[1], 10);
+  const mi = parseInt(m[2], 10);
+  const di = parseInt(m[3], 10);
+  const now = new Date();
+  let age = now.getFullYear() - yi;
+  const mo = now.getMonth() - (mi - 1);
+  if (mo < 0 || (mo === 0 && now.getDate() < di)) age--;
+  return age;
+}
+
+export function validateIsoDob(iso: string): string | null {
+  if (!iso.trim()) return "Enter your date of birth.";
+  if (ageFromIsoDate(iso) == null) {
+    return "Enter a valid date of birth (you must be between 18 and 100).";
+  }
+  return null;
+}
+
 export function validateContact(
-  v: Pick<ContactDobFields, "firstName" | "lastName" | "email" | "phone" | "state" | "consentCalls">,
+  v: Pick<ContactDobFields, "firstName" | "lastName" | "email" | "phone" | "state" | "consentCalls" | "sex">,
 ): string | null {
   if (!v.firstName.trim() || !v.lastName.trim()) return "Please enter your first and last name.";
   if (!isValidEmail(v.email)) return "Please enter a valid email address.";
   if (!isValidUsPhone(v.phone)) return "Please enter a valid U.S. phone number.";
   if (!v.state) return "Please select your state.";
+  if (v.sex !== "male" && v.sex !== "female") return "Please select male or female.";
   if (!v.consentCalls) return "Please confirm consent to be contacted by phone or text about your request.";
   return null;
 }

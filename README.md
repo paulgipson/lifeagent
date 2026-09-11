@@ -24,7 +24,7 @@ Create `.env.local` (git-ignored) and set what you use. Everything is optional; 
 
 | Variable | Purpose |
 |----------|---------|
-| `NEXT_PUBLIC_CAL_LINK` | Cal.com event path, e.g. `paul-gipson/15min`. Enables the inline booking calendar on `/thank-you` (prefilled with the lead's name, email, phone). |
+| `NEXT_PUBLIC_CAL_LINK` | Cal.com event path. Defaults to `lifeagentpaul/quote-call` (15-min phone consult). Enables the inline booking calendar on `/thank-you`. |
 | `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` | Web3Forms key for lead emails (falls back to the key in `lib/web3forms.ts`). |
 | `LEAD_WEBHOOK_URL` | Server-side webhook (Zapier, Make, GoHighLevel, etc.). Every lead is POSTed here as JSON by `/api/quote`. |
 | `LEAD_WEBHOOK_SECRET` | Optional; sent as `X-Lead-Secret` header with the webhook. |

@@ -13,4 +13,5 @@ export type ContactDobFields = {
   consentCalls: boolean;
   /** Optional recurring marketing SMS — only use if you send promotional SMS */
   consentSms: boolean;
+  sex: "" | "male" | "female";
 };

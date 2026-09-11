@@ -10,7 +10,7 @@ import { StepContact } from "@/components/quote-wizard/StepContact";
 import { StepDob } from "@/components/quote-wizard/StepDob";
 import { StepGoal } from "@/components/quote-wizard/StepGoal";
 import { WizardProgress } from "@/components/quote-wizard/WizardProgress";
-import { validateContact, validateDob } from "@/lib/quoteWizardValidate";
+import { ageFromIsoDate, validateContact, validateDob } from "@/lib/quoteWizardValidate";
 import { quoteWizardMeta, wizardProgressSteps, wizardStepBudget } from "@/lib/quoteWizardContent";
 import { submitLead, thankYouQuery } from "@/lib/leads";
 import { track } from "@/lib/analytics";
@@ -38,6 +38,7 @@ const emptyContactDob = (): ContactDobFields => ({
   birthYear: "",
   consentCalls: false,
   consentSms: false,
+  sex: "",
 });
 
 /** Map wizard goals to the coverage taxonomy used by the short form / product pages. */
@@ -126,6 +127,7 @@ export function QuoteWizard() {
 
     setSubmitting(true);
     const coverage = coverageFromGoals(goals);
+    const dateOfBirth = `${contactDob.birthYear}-${contactDob.birthMonth.padStart(2, "0")}-${contactDob.birthDay.padStart(2, "0")}`;
     const lead = {
       source: "wizard" as const,
       firstName: contactDob.firstName.trim(),
@@ -137,7 +139,9 @@ export function QuoteWizard() {
       goals: [...goals],
       beneficiary: beneficiary === "other" ? `other: ${beneficiaryOther.trim()}` : beneficiary,
       monthlyBudget: budget,
-      dateOfBirth: `${contactDob.birthYear}-${contactDob.birthMonth.padStart(2, "0")}-${contactDob.birthDay.padStart(2, "0")}`,
+      dateOfBirth,
+      age: ageFromIsoDate(dateOfBirth) ?? undefined,
+      sex: contactDob.sex as "male" | "female",
       healthConditions: preExisting,
       tobacco,
       consentCalls: contactDob.consentCalls,
@@ -219,6 +223,7 @@ export function QuoteWizard() {
               state: contactDob.state,
               consentCalls: contactDob.consentCalls,
               consentSms: contactDob.consentSms,
+              sex: contactDob.sex,
             }}
             onChange={patchContactDob}
           />

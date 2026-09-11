@@ -53,8 +53,8 @@ export const privacyPolicySections: readonly LegalSection[] = [
   {
     heading: "Information we collect",
     paragraphs: [
-      "Contact and identity information you provide (such as name, email address, phone number, and state of residence).",
-      "Quote-related details you submit (such as coverage interests, budget range, health-related selections you choose to provide, and similar questionnaire responses).",
+      "Contact and identity information you provide (such as name, email address, phone number, date of birth, sex, and state of residence).",
+      "Quote-related details you submit (such as coverage interests, tobacco use, budget range, health-related selections you choose to provide, and similar questionnaire responses).",
       "Technical data automatically collected when you use the Site (such as IP address, browser type, device type, and pages viewed), including through cookies and similar technologies where applicable.",
     ],
   },

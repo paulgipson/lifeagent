@@ -7,11 +7,21 @@ import { coverageOptions, hero, site } from "@/lib/content";
 import { tcpaConsentCallsText, tcpaConsentSmsText } from "@/lib/legalContent";
 import { licensedStateOptions, OTHER_STATE_VALUE } from "@/lib/licenses";
 import { submitLead, thankYouQuery, type LeadSource } from "@/lib/leads";
-import { isValidUsPhone } from "@/lib/quoteWizardValidate";
+import { ageFromIsoDate, isValidUsPhone, validateIsoDob } from "@/lib/quoteWizardValidate";
 import { track } from "@/lib/analytics";
 import { IconShieldKeyhole } from "@/components/icons";
 
-type FieldKey = "firstName" | "lastName" | "email" | "phone" | "state" | "coverage" | "tcpaCalls";
+type FieldKey =
+  | "firstName"
+  | "lastName"
+  | "email"
+  | "phone"
+  | "state"
+  | "coverage"
+  | "dateOfBirth"
+  | "sex"
+  | "tobacco"
+  | "tcpaCalls";
 type FieldErrors = Partial<Record<FieldKey, string>>;
 
 const fieldBase =
@@ -41,6 +51,9 @@ export function QuoteForm({
   const [errors, setErrors] = useState<FieldErrors>({});
   const [coverage, setCoverage] = useState(defaultCoverage);
   const [state, setState] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [sex, setSex] = useState("");
+  const [tobacco, setTobacco] = useState("");
   const started = useRef(false);
 
   // Allow `?coverage=iul` deep links (e.g. from ads) to preselect the product.
@@ -72,6 +85,9 @@ export function QuoteForm({
     const phone = String(fd.get("phone") ?? "").trim();
     const stateVal = String(fd.get("state") ?? "").trim();
     const coverageVal = hideCoverage ? defaultCoverage : String(fd.get("coverage") ?? "").trim();
+    const dateOfBirth = String(fd.get("dateOfBirth") ?? "").trim();
+    const sex = String(fd.get("sex") ?? "").trim();
+    const tobacco = String(fd.get("tobacco") ?? "").trim();
     const tcpaCalls = fd.get("tcpa_calls") === "yes";
     const tcpaSms = fd.get("tcpa_sms") === "yes";
     const website = String(fd.get("website") ?? "").trim();
@@ -86,6 +102,10 @@ export function QuoteForm({
     else if (!isValidUsPhone(phone)) next.phone = "Enter a valid 10-digit U.S. phone number.";
     if (!stateVal) next.state = "Select your state.";
     if (!coverageVal) next.coverage = "Pick the closest option—“Not sure” is fine.";
+    const dobErr = validateIsoDob(dateOfBirth);
+    if (dobErr) next.dateOfBirth = dobErr;
+    if (sex !== "male" && sex !== "female") next.sex = "Select male or female.";
+    if (tobacco !== "yes" && tobacco !== "no") next.tobacco = "Select smoker or non-smoker.";
     if (!tcpaCalls) next.tcpaCalls = "Please check the box so I'm allowed to call or text you back.";
 
     if (Object.keys(next).length) {
@@ -98,6 +118,7 @@ export function QuoteForm({
     setStatus("submitting");
     track("form_submit", { source, coverage: coverageVal, state: stateVal });
 
+    const age = ageFromIsoDate(dateOfBirth) ?? undefined;
     const lead = {
       source,
       firstName,
@@ -106,6 +127,10 @@ export function QuoteForm({
       phone,
       state: stateVal,
       coverage: coverageVal,
+      dateOfBirth,
+      age,
+      sex: sex as "male" | "female",
+      tobacco,
       consentCalls: true,
       consentSms: tcpaSms,
     };
@@ -119,6 +144,11 @@ export function QuoteForm({
 
     track("lead", { source, coverage: coverageVal, out_of_footprint: result.outOfFootprint });
     form.reset();
+    setDateOfBirth("");
+    setSex("");
+    setTobacco("");
+    setState("");
+    if (!defaultCoverage) setCoverage("");
     router.push(`/thank-you${thankYouQuery(lead)}`);
   }
 
@@ -285,6 +315,84 @@ export function QuoteForm({
             )}
           </div>
         )}
+      </div>
+
+      <div>
+        <label htmlFor={id("dateOfBirth")} className="sr-only">
+          Date of birth
+        </label>
+        <input
+          id={id("dateOfBirth")}
+          name="dateOfBirth"
+          type="date"
+          autoComplete="bday"
+          value={dateOfBirth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
+          aria-invalid={!!errors.dateOfBirth}
+          aria-describedby={errors.dateOfBirth ? id("err-dateOfBirth") : undefined}
+          className={`${fieldBase} ${dateOfBirth ? "text-black" : "text-slate-500"}`}
+        />
+        {errors.dateOfBirth && (
+          <p id={id("err-dateOfBirth")} className="mt-1 text-xs text-red-700" role="alert">
+            {errors.dateOfBirth}
+          </p>
+        )}
+        {!errors.dateOfBirth && (
+          <p className="mt-1 text-[11px] text-black/55">Date of birth — needed for an accurate quote.</p>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label htmlFor={id("sex")} className="sr-only">
+            Sex
+          </label>
+          <select
+            id={id("sex")}
+            name="sex"
+            value={sex}
+            onChange={(e) => setSex(e.target.value)}
+            aria-invalid={!!errors.sex}
+            aria-describedby={errors.sex ? id("err-sex") : undefined}
+            className={`${fieldBase} cursor-pointer ${sex ? "text-black" : "text-slate-500"}`}
+          >
+            <option value="" disabled>
+              Male or Female*
+            </option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+          {errors.sex && (
+            <p id={id("err-sex")} className="mt-1 text-xs text-red-700" role="alert">
+              {errors.sex}
+            </p>
+          )}
+        </div>
+        <div>
+          <label htmlFor={id("tobacco")} className="sr-only">
+            Tobacco use
+          </label>
+          <select
+            id={id("tobacco")}
+            name="tobacco"
+            value={tobacco}
+            onChange={(e) => setTobacco(e.target.value)}
+            aria-invalid={!!errors.tobacco}
+            aria-describedby={errors.tobacco ? id("err-tobacco") : undefined}
+            className={`${fieldBase} cursor-pointer ${tobacco ? "text-black" : "text-slate-500"}`}
+          >
+            <option value="" disabled>
+              Smoker or Non-smoker*
+            </option>
+            <option value="no">Non-smoker</option>
+            <option value="yes">Smoker</option>
+          </select>
+          {errors.tobacco && (
+            <p id={id("err-tobacco")} className="mt-1 text-xs text-red-700" role="alert">
+              {errors.tobacco}
+            </p>
+          )}
+        </div>
       </div>
 
       {showOutOfState && (

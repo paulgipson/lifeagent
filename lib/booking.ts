@@ -1,11 +1,13 @@
 /**
  * Appointment booking (Cal.com).
  *
- * Set NEXT_PUBLIC_CAL_LINK to the Cal.com event path, e.g. "paul-gipson/15min".
- * When unset, booking UI falls back to click-to-call / text so the page still converts.
+ * Default event: https://cal.com/lifeagentpaul/quote-call (15-min phone consult).
+ * Override with NEXT_PUBLIC_CAL_LINK if you point a different event at this site.
  */
 
-export const CAL_LINK = process.env.NEXT_PUBLIC_CAL_LINK ?? "";
+export const DEFAULT_CAL_LINK = "lifeagentpaul/quote-call";
+
+export const CAL_LINK = (process.env.NEXT_PUBLIC_CAL_LINK ?? DEFAULT_CAL_LINK).trim();
 
 export const bookingEnabled = CAL_LINK.length > 0;
 

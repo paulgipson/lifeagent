@@ -26,6 +26,10 @@ export type LeadPayload = {
   beneficiary?: string;
   monthlyBudget?: number;
   dateOfBirth?: string;
+  /** Age in years, derived from DOB when present */
+  age?: number;
+  /** Male / female — used for quoting */
+  sex?: "male" | "female";
   healthConditions?: string;
   tobacco?: string;
   consentCalls: boolean;
@@ -79,8 +83,10 @@ function toWeb3FormData(lead: LeadPayload, outOfFootprint: boolean): FormData {
   if (lead.beneficiary) fd.append("beneficiary", lead.beneficiary);
   if (typeof lead.monthlyBudget === "number") fd.append("monthly_budget", `$${lead.monthlyBudget}`);
   if (lead.dateOfBirth) fd.append("date_of_birth", lead.dateOfBirth);
+  if (typeof lead.age === "number") fd.append("age", String(lead.age));
+  if (lead.sex) fd.append("sex", lead.sex);
   if (lead.healthConditions) fd.append("health_conditions", lead.healthConditions);
-  if (lead.tobacco) fd.append("tobacco", lead.tobacco);
+  if (lead.tobacco) fd.append("tobacco", lead.tobacco === "yes" ? "smoker" : lead.tobacco === "no" ? "non-smoker" : lead.tobacco);
   fd.append("licensed_state", outOfFootprint ? "no" : "yes");
   fd.append("tcpa_consent_calls", lead.consentCalls ? "yes" : "no");
   fd.append("tcpa_consent_sms", lead.consentSms ? "yes" : "no");

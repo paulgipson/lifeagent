@@ -47,7 +47,7 @@ Hero + form → carrier marquee → value banner → how it works → four cover
 
 | Item | Notes |
 |------|--------|
-| **Cal.com link** | Set `NEXT_PUBLIC_CAL_LINK` (e.g. `paul-gipson/15min`) in Vercel env vars. Until set, the thank-you page shows call/text buttons only. |
+| **Cal.com link** | Default is `lifeagentpaul/quote-call` (created in Cal.com). Override with `NEXT_PUBLIC_CAL_LINK` in Vercel if needed. |
 | **CRM webhook** | Set `LEAD_WEBHOOK_URL` so leads land in a CRM / sheet and trigger an instant SMS to Paul and the lead. |
 | **Analytics IDs** | Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` / `NEXT_PUBLIC_META_PIXEL_ID`; mark `lead` and `booking_complete` as conversions. |
 | **Real reviews** | Add attributable Google reviews to `testimonialsSection.items` and set `reviewsUrl`. |
