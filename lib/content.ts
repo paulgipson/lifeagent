@@ -50,7 +50,7 @@ export const primaryNav: readonly NavItem[] = [
 export const primaryCta = {
   label: "Get my free quote",
   shortLabel: "Get quote",
-  href: "/#quote",
+  href: "/#quote-form",
 } as const;
 
 /** Dedupe by href (first wins) — use if merging nav from multiple sources. */
@@ -167,7 +167,7 @@ export const howItWorksSection = {
   heading: "Covered in 3 simple steps",
   intro: "No fees, no obligation, and you can stop at any step.",
   ctaText: "Start step 1 now",
-  ctaHref: "/#quote",
+  ctaHref: "/#quote-form",
   steps: [
     {
       stepLabel: "STEP 1",

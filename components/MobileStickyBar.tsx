@@ -2,18 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { primaryCta, site } from "@/lib/content";
+import { QUOTE_FORM_ANCHOR } from "@/lib/quoteAnchor";
 import { QuoteCta } from "@/components/QuoteCta";
 import { track } from "@/lib/analytics";
 
 /**
- * Persistent call / quote bar on small screens. Hidden while the hero form (`#quote`) is on screen
+ * Persistent call / quote bar on small screens. Hidden while the quote form card is on screen
  * so it never covers the thing it's pointing to.
  */
 export function MobileStickyBar() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const target = document.getElementById("quote");
+    const target = document.getElementById(QUOTE_FORM_ANCHOR);
     if (!target) {
       const raf = requestAnimationFrame(() => setVisible(true));
       return () => cancelAnimationFrame(raf);

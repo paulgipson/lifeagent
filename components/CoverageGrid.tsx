@@ -26,7 +26,7 @@ export function CoverageGrid() {
               <p className="mt-3 flex-1 text-sm leading-relaxed text-black/80">{p.cardBody}</p>
               <div className="mt-6 flex flex-col gap-2">
                 <Link
-                  href={`/${p.slug}#quote`}
+                  href={`/${p.slug}#quote-form`}
                   className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-black px-5 text-xs font-bold uppercase tracking-[0.16em] text-brand-bright transition hover:bg-neutral-900"
                 >
                   {coverageSection.quoteLabel}

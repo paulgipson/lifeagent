@@ -4,6 +4,7 @@ import "./globals.css";
 import { paul, site } from "@/lib/content";
 import { licensedStates } from "@/lib/licenses";
 import { Analytics } from "@/components/Analytics";
+import { QuoteFormAnchorScroll } from "@/components/QuoteFormAnchorScroll";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -88,6 +89,7 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
+        <QuoteFormAnchorScroll />
         {children}
         <Analytics />
       </body>

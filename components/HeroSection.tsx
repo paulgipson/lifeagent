@@ -26,7 +26,7 @@ export function HeroSection({
   source = "hero_form",
 }: Props) {
   return (
-    <section id="quote" className="gradient-hero w-full scroll-mt-20 text-black md:scroll-mt-24">
+    <section id="quote" className="gradient-hero w-full text-black">
       <div className="mx-auto grid max-w-7xl gap-10 px-[clamp(1rem,4vw,2rem)] py-10 md:grid-cols-[1.1fr_0.9fr] md:items-start md:gap-12 md:py-16 lg:gap-16 lg:py-20">
         <div>
           <p className="font-heading text-[11px] font-bold uppercase tracking-[0.26em] text-black/80 md:text-xs">{kicker}</p>
@@ -58,7 +58,10 @@ export function HeroSection({
           <TrustStrip className="mt-8" />
         </div>
 
-        <div className="w-full min-w-0 rounded-[20px] bg-white px-5 py-7 shadow-[0_24px_60px_-18px_rgba(0,0,0,0.25)] sm:px-7 sm:py-8 md:ml-auto md:max-w-[28rem]">
+        <div
+          id="quote-form"
+          className="w-full min-w-0 scroll-mt-[5.5rem] rounded-[20px] bg-white px-5 py-7 shadow-[0_24px_60px_-18px_rgba(0,0,0,0.25)] sm:px-7 sm:py-8 md:ml-auto md:max-w-[28rem] md:scroll-mt-28"
+        >
           <h2 className="text-center font-heading text-[clamp(1.2rem,2.8vw,1.6rem)] font-extrabold uppercase leading-tight tracking-[0.06em] text-black">
             <span className="text-black">Get your </span>
             <span className="text-brand">free quote</span>
