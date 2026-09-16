@@ -1,4 +1,4 @@
-import { bottomCta, site } from "@/lib/content";
+import { bottomCta } from "@/lib/content";
 import { QuoteForm } from "@/components/QuoteForm";
 
 /** Final conversion block — a second form so nobody has to scroll back to the top. */
@@ -10,12 +10,6 @@ export function BottomCta({ defaultCoverage, hideCoverage }: { defaultCoverage?:
           <p className="font-heading text-[11px] font-bold uppercase tracking-[0.26em] text-white/85">{bottomCta.kicker}</p>
           <h2 className="mt-4 font-heading text-3xl font-bold leading-tight sm:text-4xl">{bottomCta.heading}</h2>
           <p className="mt-5 text-base leading-relaxed text-white/90 sm:text-lg">{bottomCta.sub}</p>
-          <a
-            href={`tel:${site.phoneTel}`}
-            className="mt-6 inline-flex min-h-[48px] items-center justify-center rounded-full border-2 border-white px-7 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-white/10"
-          >
-            Call {site.phone}
-          </a>
         </div>
         <div className="rounded-[20px] bg-white px-5 py-7 text-black shadow-[0_24px_60px_-18px_rgba(0,0,0,0.35)] sm:px-7 sm:py-8">
           <QuoteForm source="bottom_form" idPrefix="bottom" defaultCoverage={defaultCoverage} hideCoverage={hideCoverage} />

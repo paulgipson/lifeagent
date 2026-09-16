@@ -173,7 +173,7 @@ export const products: readonly Product[] = [
     ],
     metaTitle: "Final Expense Insurance | No Exam Burial Coverage Ages 50–85",
     metaDescription:
-      "Final expense and burial insurance with no medical exam. Fixed premiums, lifetime coverage, fast approval. Talk to a licensed agent—free quote by phone.",
+      "Final expense and burial insurance with no medical exam. Fixed premiums, lifetime coverage, fast approval. Talk to a licensed agent—request a free quote online.",
     fitHeading: "Final expense is usually the right fit if you…",
     fitPoints: [
       "Are 50–85 and want to spare your family funeral and medical bills",

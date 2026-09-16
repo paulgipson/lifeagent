@@ -59,7 +59,6 @@ const jsonLd = {
   name: `${site.name} (${paul.displayName})`,
   description: site.tagline,
   url: site.url,
-  telephone: site.phoneTel,
   email: site.email,
   image: `${site.url}/paul-gipson.png`,
   priceRange: "Free consultation",

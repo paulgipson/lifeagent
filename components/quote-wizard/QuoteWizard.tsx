@@ -14,7 +14,6 @@ import { ageFromIsoDate, validateContact, validateDob } from "@/lib/quoteWizardV
 import { quoteWizardMeta, wizardProgressSteps, wizardStepBudget } from "@/lib/quoteWizardContent";
 import { submitLead, thankYouQuery } from "@/lib/leads";
 import { track } from "@/lib/analytics";
-import { site } from "@/lib/content";
 
 /** Last wizard step index (contact). Successful submit → `/thank-you`. */
 const CONTACT_STEP = wizardProgressSteps.length - 1;
@@ -151,7 +150,7 @@ export function QuoteWizard() {
     const result = await submitLead(lead);
     setSubmitting(false);
     if (!result.ok) {
-      setFormError(`${result.message} You can also call me at ${site.phone}.`);
+      setFormError(result.message);
       return;
     }
     track("wizard_complete", { coverage });
@@ -257,14 +256,6 @@ export function QuoteWizard() {
           </button>
         </div>
 
-        {isLast && (
-          <p className="mt-6 text-center text-xs text-black/60">
-            Prefer to talk now?{" "}
-            <a href={`tel:${site.phoneTel}`} className="font-semibold text-brand underline underline-offset-2" onClick={() => track("phone_click", { location: "wizard" })}>
-              Call {site.phone}
-            </a>
-          </p>
-        )}
       </div>
     </>
   );

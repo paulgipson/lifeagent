@@ -1,6 +1,6 @@
 /** Central copy and config — Paul Gipson, first person (see build.md). */
 
-import { licensedStateCodeList, licensedStates } from "@/lib/licenses";
+import { licensedStates } from "@/lib/licenses";
 
 export const paul = {
   displayName: "Paul Gipson",
@@ -14,11 +14,6 @@ export const site = {
   /** SEO title for the homepage */
   seoTitle: "Life Insurance Agent | Term, Whole Life, IUL & Final Expense Quotes",
   url: "https://lifeagentpaul.com",
-  phone: "(424) 244-1061",
-  /** E.164 — used for `tel:` links and structured data */
-  phoneTel: "+14242441061",
-  /** Prefilled text so a lead can start a conversation in one tap */
-  smsBody: "Hi Paul, I just requested a life insurance quote on your site and I'd like to talk.",
   email: "hello@lifeagentpaul.com",
   /** Single line for footer / UI */
   address: "Los Angeles, CA",
@@ -77,7 +72,7 @@ export const hero = {
   submitLabel: "Get my free quote",
   /** Trust strip under the hero copy */
   trust: [
-    { value: `${licensedStateCount}`, label: "States licensed", detail: licensedStateCodeList },
+    { value: `${licensedStateCount}`, label: "States licensed" },
     { value: site.carrierCountLabel, label: "Carriers compared" },
     { value: "1", label: "Agent, start to finish" },
     { value: "$0", label: "Fees to work with me" },
@@ -214,7 +209,7 @@ export const homeFaq = {
     },
     {
       q: "What happens after I submit the form?",
-      a: `I personally review your request and reach out ${site.responsePromise} during business hours. You can also book a specific time on my calendar or call me directly at ${site.phone}. There's no fee and no obligation.`,
+      a: `I personally review your request and reach out ${site.responsePromise} during business hours. You can also book a specific time on my calendar after you submit the form. There's no fee and no obligation.`,
     },
     {
       q: "Do you charge a fee?",
@@ -227,5 +222,5 @@ export const homeFaq = {
 export const bottomCta = {
   kicker: "Ready when you are",
   heading: "Get your free quote—I'll take it from here.",
-  sub: `Fill this out and I'll personally reach out ${site.responsePromise}. Prefer to talk now? Call ${site.phone}.`,
+  sub: `Fill this out and I'll personally reach out ${site.responsePromise}—no call center, just me.`,
 } as const;

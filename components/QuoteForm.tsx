@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { coverageOptions, hero, site } from "@/lib/content";
+import { coverageOptions, hero } from "@/lib/content";
 import { tcpaConsentCallsText, tcpaConsentSmsText } from "@/lib/legalContent";
 import { licensedStateOptions, OTHER_STATE_VALUE } from "@/lib/licenses";
 import { submitLead, thankYouQuery, type LeadSource } from "@/lib/leads";
@@ -159,13 +159,6 @@ export function QuoteForm({
       {status === "error" && (
         <div className="rounded-md border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-800" role="alert">
           <p className="font-medium">{apiMessage ?? "Something went wrong. Please try again in a moment."}</p>
-          <a
-            href={`tel:${site.phoneTel}`}
-            className="mt-2 inline-block font-semibold text-red-900 underline underline-offset-2"
-            onClick={() => track("phone_click", { location: "form_error" })}
-          >
-            Or call me now: {site.phone}
-          </a>
         </div>
       )}
 

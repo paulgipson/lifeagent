@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { primaryCta, site } from "@/lib/content";
+import { primaryCta } from "@/lib/content";
 import { QUOTE_FORM_ANCHOR } from "@/lib/quoteAnchor";
 import { QuoteCta } from "@/components/QuoteCta";
-import { track } from "@/lib/analytics";
 
 /**
- * Persistent call / quote bar on small screens. Hidden while the quote form card is on screen
+ * Persistent quote bar on small screens. Hidden while the quote form card is on screen
  * so it never covers the thing it's pointing to.
  */
 export function MobileStickyBar() {
@@ -36,22 +35,12 @@ export function MobileStickyBar() {
       }`}
       aria-hidden={!visible}
     >
-      <div className="mx-auto flex max-w-lg gap-3">
-        <a
-          href={`tel:${site.phoneTel}`}
-          onClick={() => track("phone_click", { location: "sticky_bar" })}
-          className="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-full border-2 border-black bg-white text-sm font-bold uppercase tracking-[0.12em] text-black"
-        >
-          <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-            <path d="M6.6 10.8c1.8 3.6 4.8 6.6 8.4 8.4l2.8-2.8c.4-.4 1-.6 1.6-.4 1 .4 2.1.6 3.2.6.8 0 1.4.6 1.4 1.4V21c0 .8-.6 1.4-1.4 1.4C9.4 22.4 1.6 14.6 1.6 4.4 1.6 3.6 2.2 3 3 3h3.2c.8 0 1.4.6 1.4 1.4 0 1.1.2 2.2.6 3.2.2.6 0 1.2-.4 1.6l-2.8 2.8z" />
-          </svg>
-          Call Paul
-        </a>
+      <div className="mx-auto flex max-w-lg">
         <QuoteCta
           location="sticky_bar"
           className="flex min-h-[48px] flex-1 items-center justify-center rounded-full bg-black text-sm font-bold uppercase tracking-[0.12em] text-brand-bright"
         >
-          {primaryCta.shortLabel}
+          {primaryCta.label}
         </QuoteCta>
       </div>
     </div>

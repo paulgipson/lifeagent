@@ -5,10 +5,8 @@ import { paul, site } from "@/lib/content";
 export const thankYouHero = {
   title: "You're in.",
   subtitle: `Thanks for reaching out—I've got your request, ${site.name} style: personally, not through a call center.`,
-  body: `I'll review what you shared and call you ${site.responsePromise}. Want to skip the wait? Pick a time below and I'll call you then, or call or text me right now.`,
+  body: `I'll review what you shared and call you ${site.responsePromise}. Want to skip the wait? Pick a time below and I'll call you then.`,
   personalQuote: `I'm ${paul.displayName}, and I'll be the one on the phone—same agent from first call to policy in force.`,
-  callLabel: "Call Paul now",
-  textLabel: "Text Paul",
   outOfStateNotice:
     "Heads up: I'm not licensed in your state yet, so I'll personally connect you with a trusted agent who is. You'll still hear from me first.",
 } as const;
@@ -26,7 +24,7 @@ export const thankYouExpect = {
     },
     {
       label: "STEP II",
-      body: `I call you from ${site.phone} (save it so you know it's me). If you booked a time, I'll call exactly then. If I miss you, I'll text.`,
+      body: "I'll call you at the number you provided. If you booked a time, I'll call exactly then. If I miss you, I'll follow up.",
     },
     {
       label: "STEP III",
@@ -67,12 +65,12 @@ export const thankYouFaq = {
     },
     {
       q: "What if I don't hear from you?",
-      a: `Call or text me directly at ${site.phone}, or email ${site.email}. Check your spam folder too—my confirmation email sometimes lands there.`,
+      a: `Email me at ${site.email} and check your spam folder—my confirmation email sometimes lands there. I'll also follow up using the details you submitted on the form.`,
     },
   ],
 } as const;
 
 export const thankYouPreFooter = {
-  line1: "Don't want to wait for my call?",
-  line2: "Call or text me now and we can get started today.",
+  line1: "Don't want to wait?",
+  line2: "Pick a time on my calendar above and I'll call you then.",
 } as const;

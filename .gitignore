@@ -20,6 +20,9 @@
 # production
 /build
 
+# local ad artboards (not part of the site repo)
+/ad-creatives/
+
 # misc
 .DS_Store
 *.pem

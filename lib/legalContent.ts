@@ -110,7 +110,7 @@ export const privacyPolicySections: readonly LegalSection[] = [
   {
     heading: "Contact",
     paragraphs: [
-      `Questions about this policy: ${site.email} or ${site.phone}.`,
+      `Questions about this policy: ${site.email}.`,
     ],
   },
 ];
@@ -174,7 +174,7 @@ export const termsOfServiceSections: readonly LegalSection[] = [
   {
     heading: "Contact",
     paragraphs: [
-      `Questions: ${site.email} or ${site.phone}.`,
+      `Questions: ${site.email}.`,
     ],
   },
 ];

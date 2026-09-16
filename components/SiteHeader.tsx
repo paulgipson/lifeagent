@@ -2,20 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { primaryCta, primaryNav, site } from "@/lib/content";
+import { primaryCta, primaryNav } from "@/lib/content";
 import { QuoteCta } from "@/components/QuoteCta";
-import { track } from "@/lib/analytics";
-
-function PhoneIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path
-        d="M6.6 10.8c1.8 3.6 4.8 6.6 8.4 8.4l2.8-2.8c.4-.4 1-.6 1.6-.4 1 .4 2.1.6 3.2.6.8 0 1.4.6 1.4 1.4V21c0 .8-.6 1.4-1.4 1.4C9.4 22.4 1.6 14.6 1.6 4.4 1.6 3.6 2.2 3 3 3h3.2c.8 0 1.4.6 1.4 1.4 0 1.1.2 2.2.6 3.2.2.6 0 1.2-.4 1.6l-2.8 2.8z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
 
 function LogoLockup() {
   return (
@@ -36,33 +24,6 @@ function LogoLockup() {
         </p>
       </div>
     </Link>
-  );
-}
-
-function PhoneBlock({ className, onClick, compact = false }: { className?: string; onClick?: () => void; compact?: boolean }) {
-  return (
-    <a
-      href={`tel:${site.phoneTel}`}
-      className={`flex items-center gap-3 ${className ?? ""}`}
-      data-analytics="phone_click"
-      aria-label={`Call ${site.phone}`}
-      onClick={() => {
-        track("phone_click", { location: "header" });
-        onClick?.();
-      }}
-    >
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-brand-bright text-black shadow-inner md:h-11 md:w-11">
-        <PhoneIcon className="h-5 w-5" />
-      </span>
-      {!compact && (
-        <div className="min-w-0 text-left">
-          <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.14em] text-white">Call or text</p>
-          <p className="mt-1.5 whitespace-nowrap text-sm font-bold leading-none tracking-tight text-white tabular-nums md:text-base">
-            {site.phone}
-          </p>
-        </div>
-      )}
-    </a>
   );
 }
 
@@ -95,8 +56,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-3">
-          <PhoneBlock className="hidden md:flex" />
-          <PhoneBlock className="md:hidden" compact />
           <QuoteCta
             location="header"
             className="hidden items-center justify-center whitespace-nowrap rounded-full bg-brand-bright px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.14em] text-black shadow-sm transition hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black sm:inline-flex md:text-xs"
@@ -149,10 +108,6 @@ export function SiteHeader() {
             >
               {primaryCta.label}
             </QuoteCta>
-            <PhoneBlock
-              className="mt-3 rounded-md border border-white/15 px-3 py-3"
-              onClick={() => setOpen(false)}
-            />
           </nav>
         </div>
       )}
