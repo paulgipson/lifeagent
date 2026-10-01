@@ -101,3 +101,32 @@ body {
     transform: translateX(-50%);
   }
 }
+
+/**
+ * iOS Safari: empty `input[type="date"]` has a huge intrinsic min-width and centers
+ * the mm/dd/yyyy placeholder, which overflows narrow form cards.
+ */
+.input-date {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.input-date::-webkit-datetime-edit {
+  display: block;
+  padding: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.input-date::-webkit-date-and-time-value {
+  text-align: left;
+  min-width: 0;
+}
+
+.input-date::-webkit-calendar-picker-indicator {
+  margin-left: 0;
+  flex-shrink: 0;
+}

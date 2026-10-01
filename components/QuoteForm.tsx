@@ -25,7 +25,7 @@ type FieldKey =
 type FieldErrors = Partial<Record<FieldKey, string>>;
 
 const fieldBase =
-  "w-full rounded-md border border-brand bg-white px-3 py-3 text-base text-black placeholder:text-slate-500 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/30 sm:text-sm";
+  "box-border w-full min-w-0 max-w-full rounded-md border border-brand bg-white px-3 py-3 text-base text-black placeholder:text-slate-500 outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/30 sm:text-sm";
 
 type Props = {
   /** Where this form instance lives — used for attribution */
@@ -155,7 +155,12 @@ export function QuoteForm({
   const showOutOfState = state === OTHER_STATE_VALUE;
 
   return (
-    <form onSubmit={handleSubmit} onFocusCapture={onFirstInteraction} className="flex flex-col gap-3 text-left" noValidate>
+    <form
+      onSubmit={handleSubmit}
+      onFocusCapture={onFirstInteraction}
+      className="flex min-w-0 w-full flex-col gap-3 text-left"
+      noValidate
+    >
       {status === "error" && (
         <div className="rounded-md border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-800" role="alert">
           <p className="font-medium">{apiMessage ?? "Something went wrong. Please try again in a moment."}</p>
@@ -167,8 +172,8 @@ export function QuoteForm({
         <input type="text" id={id("website")} name="website" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div>
+      <div className="grid min-w-0 grid-cols-2 gap-3">
+        <div className="min-w-0">
           <label htmlFor={id("firstName")} className="sr-only">
             First name
           </label>
@@ -188,7 +193,7 @@ export function QuoteForm({
             </p>
           )}
         </div>
-        <div>
+        <div className="min-w-0">
           <label htmlFor={id("lastName")} className="sr-only">
             Last name
           </label>
@@ -310,7 +315,7 @@ export function QuoteForm({
         )}
       </div>
 
-      <div>
+      <div className="min-w-0 w-full">
         <label htmlFor={id("dateOfBirth")} className="sr-only">
           Date of birth
         </label>
@@ -322,8 +327,8 @@ export function QuoteForm({
           value={dateOfBirth}
           onChange={(e) => setDateOfBirth(e.target.value)}
           aria-invalid={!!errors.dateOfBirth}
-          aria-describedby={errors.dateOfBirth ? id("err-dateOfBirth") : undefined}
-          className={`${fieldBase} ${dateOfBirth ? "text-black" : "text-slate-500"}`}
+          aria-describedby={errors.dateOfBirth ? id("err-dateOfBirth") : id("hint-dateOfBirth")}
+          className={`input-date ${fieldBase} ${dateOfBirth ? "text-black" : "text-slate-500"}`}
         />
         {errors.dateOfBirth && (
           <p id={id("err-dateOfBirth")} className="mt-1 text-xs text-red-700" role="alert">
@@ -331,12 +336,14 @@ export function QuoteForm({
           </p>
         )}
         {!errors.dateOfBirth && (
-          <p className="mt-1 text-[11px] text-black/55">Date of birth — needed for an accurate quote.</p>
+          <p id={id("hint-dateOfBirth")} className="mt-1 text-[11px] text-black/55">
+            Date of birth — needed for an accurate quote.
+          </p>
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div>
+      <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="min-w-0">
           <label htmlFor={id("sex")} className="sr-only">
             Sex
           </label>
@@ -350,7 +357,7 @@ export function QuoteForm({
             className={`${fieldBase} cursor-pointer ${sex ? "text-black" : "text-slate-500"}`}
           >
             <option value="" disabled>
-              Male or Female*
+              Sex*
             </option>
             <option value="male">Male</option>
             <option value="female">Female</option>
@@ -361,7 +368,7 @@ export function QuoteForm({
             </p>
           )}
         </div>
-        <div>
+        <div className="min-w-0">
           <label htmlFor={id("tobacco")} className="sr-only">
             Tobacco use
           </label>
@@ -375,7 +382,7 @@ export function QuoteForm({
             className={`${fieldBase} cursor-pointer ${tobacco ? "text-black" : "text-slate-500"}`}
           >
             <option value="" disabled>
-              Smoker or Non-smoker*
+              Tobacco use*
             </option>
             <option value="no">Non-smoker</option>
             <option value="yes">Smoker</option>

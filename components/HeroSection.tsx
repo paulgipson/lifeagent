@@ -67,7 +67,7 @@ export function HeroSection({
             <span className="text-brand">free quote</span>
           </h2>
           <p className="mt-2 text-center text-sm text-black/70">{hero.formSub}</p>
-          <div className="mt-6">
+          <div className="mt-6 min-w-0 overflow-x-clip">
             <QuoteForm source={source} defaultCoverage={defaultCoverage} hideCoverage={hideCoverage} idPrefix={`${source}`} />
           </div>
         </div>
