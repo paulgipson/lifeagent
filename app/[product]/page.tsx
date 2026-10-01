@@ -14,6 +14,7 @@ import { IconCheck } from "@/components/icons";
 import { QuoteCta } from "@/components/QuoteCta";
 import { partnerLogos } from "@/lib/partnerLogos";
 import { productBySlug, products } from "@/lib/products";
+import { mortgageProtection } from "@/lib/mortgageProtection";
 import { site } from "@/lib/content";
 
 type Params = Promise<{ product: string }>;
@@ -131,6 +132,12 @@ export default async function ProductPage({ params }: { params: Params }) {
                   {p.shortName}
                 </Link>
               ))}
+              <Link
+                href={`/${mortgageProtection.slug}`}
+                className="inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-black px-5 text-xs font-bold uppercase tracking-[0.14em] text-black transition hover:bg-slate-50"
+              >
+                {mortgageProtection.shortName}
+              </Link>
             </div>
           </div>
         </section>

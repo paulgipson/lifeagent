@@ -85,6 +85,7 @@ export const coverageOptions = [
   { value: "whole-life", label: "Whole life" },
   { value: "iul", label: "Indexed universal life (IUL)" },
   { value: "final-expense", label: "Final expense / burial" },
+  { value: "mortgage-protection", label: "Mortgage protection" },
   { value: "other", label: "Not sure yet—help me choose" },
 ] as const;
 

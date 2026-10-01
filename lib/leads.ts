@@ -19,7 +19,7 @@ export type LeadPayload = {
   email: string;
   phone: string;
   state: string;
-  /** Coverage interest (term-life, whole-life, iul, final-expense, other) */
+  /** Coverage interest (term-life, whole-life, iul, final-expense, mortgage-protection, other) */
   coverage?: string;
   /** Wizard-only enrichment */
   goals?: string[];

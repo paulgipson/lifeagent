@@ -3,6 +3,7 @@ import { HeroSection } from "@/components/HeroSection";
 import { ValueBanner } from "@/components/ValueBanner";
 import { HowItWorks } from "@/components/HowItWorks";
 import { CoverageGrid } from "@/components/CoverageGrid";
+import { MortgageProtectionSection } from "@/components/MortgageProtectionSection";
 import { PartnerLogoMarquee } from "@/components/PartnerLogoMarquee";
 import { LifestyleSplit } from "@/components/LifestyleSplit";
 import { AgentSpotlight } from "@/components/AgentSpotlight";
@@ -29,6 +30,7 @@ export default function Home() {
         <ValueBanner />
         <HowItWorks />
         <CoverageGrid />
+        <MortgageProtectionSection />
         <LifestyleSplit />
         <AgentSpotlight />
         <AboutCollage />
