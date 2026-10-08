@@ -14,7 +14,7 @@ export const site = {
   /** SEO title for the homepage */
   seoTitle: "Life Insurance Agent | Term, Whole Life, IUL & Final Expense Quotes",
   url: "https://lifeagentpaul.com",
-  email: "hello@lifeagentpaul.com",
+  email: "LifeAgentPaul@gmail.com",
   /** Single line for footer / UI */
   address: "Los Angeles, CA",
   addressLocality: "Los Angeles",
@@ -38,6 +38,7 @@ export const primaryNav: readonly NavItem[] = [
   { id: "coverage", href: "/#coverage", label: "Coverage" },
   { id: "how", href: "/#how-it-works", label: "How it works" },
   { id: "paul", href: "/#agent", label: "Meet Paul" },
+  { id: "book", href: "/book", label: "Book a call" },
   { id: "faq", href: "/#faq", label: "FAQ" },
 ];
 
